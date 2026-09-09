@@ -1,8 +1,5 @@
 """
 Pocket TNT Analysis Pipeline
-============================
-
-Python translation of the Pocket Think/No-Think (TNT) analysis workflow.
 
 The pipeline:
 1. Loads participant-level TNT data.
@@ -18,13 +15,6 @@ The pipeline:
     and paired t-tests.
 11. Saves analysis tables, figures, and the final participant-level dataset.
 
-IMPORTANT SEM NOTE
-------------------
-The original R analysis used lavaan with estimator="MLR", missing="fiml",
-and std.lv=TRUE. semopy does not reproduce lavaan's MLR + FIML workflow
-identically. This script uses semopy for a close Python-native CFA workflow.
-If exact numerical replication of the lavaan models is required, retain the
-R/lavaan models as the confirmatory reference analysis.
 
 Author: Ketaki Sengupta
 """
@@ -44,9 +34,7 @@ from scipy import stats
 from semopy import Model, calc_stats
 
 
-# =============================================================================
 # CONFIGURATION
-# =============================================================================
 
 REP_SAME_FIRST = [f"rep{i:02d}_NT_sametarget" for i in range(1, 6)]
 REP_SAME_SECOND = [f"rep{i:02d}_NT_sametarget" for i in range(6, 11)]
@@ -73,9 +61,9 @@ class AnalysisResults:
     statistical_tests: pd.DataFrame
 
 
-# =============================================================================
+
 # INPUT / VALIDATION
-# =============================================================================
+# ============================================================================
 
 def load_dataset(path: Path) -> pd.DataFrame:
     """Load an Excel or CSV participant-level TNT dataset."""
@@ -523,14 +511,6 @@ def fit_one_factor_cfa(
 ) -> tuple[pd.Series, pd.DataFrame, object]:
     """
     Fit a one-factor CFA with semopy and return participant factor scores.
-
-    Notes
-    -----
-    The original R workflow used lavaan MLR + FIML + std.lv=TRUE.
-    semopy is used here as a Python-native approximation and may not produce
-    identical estimates, standard errors, fit measures, or factor scores.
-
-    Missing-data handling also differs from the lavaan implementation.
     """
     model_description = (
         f"{factor_name} =~ " + " + ".join(indicators)
