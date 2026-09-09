@@ -1,8 +1,6 @@
-# Pocket TNT Analysis — Python
+# Pocket TNT Analysis
 
-A Python implementation of the analysis pipeline for the **Pocket Think/No-Think (TNT)** intrusion-control task.
-
-This repository translates the original R analysis into a documented and reproducible Python workflow suitable for research code sharing.
+Analysis pipeline for the Pocket Think/No-Think (TNT) intrusion-control task.
 
 ## What the analysis does
 
@@ -62,7 +60,7 @@ Place the participant-level dataset somewhere on your computer and run:
 python pocket_tnt_analysis.py path/to/TNT_data.xlsx
 ```
 
-By default, the analysis samples **12 participants per Counterbalance × randomizer cell**, reproducing the sampling step in the original R workflow.
+By default, the analysis samples 12 participants per Counterbalance × randomizer cell
 
 To analyze all available participants instead:
 
@@ -76,11 +74,7 @@ To specify a different output directory:
 python pocket_tnt_analysis.py path/to/TNT_data.xlsx --output-dir results
 ```
 
-To reproduce the same random sample across runs, the script uses a fixed random seed (`2026`) by default. You can change it with:
 
-```bash
-python pocket_tnt_analysis.py path/to/TNT_data.xlsx --seed 123
-```
 
 ## Expected data format
 
@@ -146,22 +140,6 @@ Corrected cue independence =
 (Rep06_diff - Rep06_same) - (Rep05_diff - Rep05_same)
 ```
 
-## CFA / latent-factor note
-
-The original R analysis used **lavaan** with:
-
-```r
-estimator = "MLR"
-missing = "fiml"
-std.lv = TRUE
-```
-
-The Python implementation uses **semopy**.
-
-These approaches are conceptually similar but are **not guaranteed to be numerically identical**, particularly for robust standard errors, missing-data treatment, latent-variable scaling, fit indices, and regression factor scores.
-
-For strict confirmatory replication of previously reported lavaan results, the original R/lavaan analysis should remain the reference implementation. The Python CFA is provided as a Python-native implementation of the same factor structure.
-
 ## Output
 
 The script creates files such as:
@@ -183,16 +161,9 @@ rows_with_missing_values.xlsx
 
 and PNG figures for the intrusion trajectory and key score distributions.
 
-## Reproducibility note
-
-The original R script sampled participants using `slice_sample(n = 12)` without an explicit random seed. The Python implementation exposes the seed and defaults to `2026`, making the sample reproducible.
-
-If you need to reproduce an exact historical R sample, you must use the participant IDs from that historical sample or the exact R random-number state used at the time.
 
 ## Data privacy
 
 Raw participant-level research data are deliberately excluded from this repository through `.gitignore`.
-
-Do **not** upload identifiable, pseudonymized, or restricted participant data to a public GitHub repository unless the study's consent, ethics approval, and data-sharing plan explicitly permit it.
 
 The `data/` directory contains only instructions for local use.
