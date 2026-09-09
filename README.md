@@ -24,55 +24,23 @@ The pipeline:
 12. runs Shapiro-Wilk tests, one-sample Wilcoxon signed-rank tests, repeated-measures ANOVAs, and paired t-tests;
 13. exports processed data, statistical tables, and figures.
 
-## Repository structure
 
-```text
-pocket-tnt-analysis/
-│
-├── pocket_tnt_analysis.py
-├── original_R_analysis.R
-├── requirements.txt
-├── README.md
-├── .gitignore
-│
-├── data/
-│   └── README.md
-│
-└── outputs/
-    └── .gitkeep
-```
-
-## Installation
-
-Python 3.10 or newer is recommended.
-
-Clone the repository and install the dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-## Running the analysis
 
 Place the participant-level dataset somewhere on your computer and run:
 
-```bash
 python pocket_tnt_analysis.py path/to/TNT_data.xlsx
-```
+
 
 By default, the analysis samples 12 participants per Counterbalance × randomizer cell
 
 To analyze all available participants instead:
 
-```bash
 python pocket_tnt_analysis.py path/to/TNT_data.xlsx --n-per-cell 0
-```
+
 
 To specify a different output directory:
 
-```bash
 python pocket_tnt_analysis.py path/to/TNT_data.xlsx --output-dir results
-```
 
 
 
@@ -80,27 +48,23 @@ python pocket_tnt_analysis.py path/to/TNT_data.xlsx --output-dir results
 
 The participant-level dataset must contain:
 
-```text
 ParticipantID
 Counterbalance
 randomizer
-```
 
 and TNT repetition columns following this naming convention:
 
-```text
 rep01_NT_sametarget
 rep02_NT_sametarget
-...
+
 rep10_NT_sametarget
 
 rep01_NT_differenttarget
-...
+
 rep10_NT_differenttarget
 
 rep01_T_differenttarget
-...
-```
+
 
 The script detects repetition columns from the `rep##_Condition` naming pattern.
 
@@ -110,9 +74,8 @@ The script detects repetition columns from the `rep##_Condition` naming pattern.
 
 For each participant, the script fits:
 
-```text
 Intrusion ~ Repetition
-```
+
 
 within each selected task segment. The coefficient for repetition is saved as the participant's intrusion slope.
 
@@ -120,50 +83,21 @@ within each selected task segment. The coefficient for repetition is saved as th
 
 For each five-repetition block:
 
-```text
+
 IIC = ((Rep1 + Rep5) / 2) + Rep2 + Rep3 + Rep4 - 4 × Rep1
-```
+
 
 This is calculated separately for same-target and different-target No-Think conditions and for the first and second halves of the task.
 
 ### Cue independence
 
-```text
 Cue independence =
 Rep06_NT_differenttarget - Rep06_NT_sametarget
-```
+
 
 Corrected cue independence additionally controls for the condition difference immediately before the target switch:
 
-```text
 Corrected cue independence =
 (Rep06_diff - Rep06_same) - (Rep05_diff - Rep05_same)
-```
-
-## Output
-
-The script creates files such as:
-
-```text
-Pocket_TNT_Analyzed.xlsx
-Pocket_TNT_Long.csv
-TNT_summary.csv
-reliability_cronbach_alpha.csv
-correlation_matrix.csv
-correlation_pvalues.csv
-correlation_95CI.csv
-cfa_fit_statistics.csv
-univariate_tests.csv
-cue_independence_rm_anova.csv
-passive_decay_rm_anova.csv
-rows_with_missing_values.xlsx
-```
-
-and PNG figures for the intrusion trajectory and key score distributions.
 
 
-## Data privacy
-
-Raw participant-level research data are deliberately excluded from this repository through `.gitignore`.
-
-The `data/` directory contains only instructions for local use.
