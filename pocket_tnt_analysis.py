@@ -15,8 +15,6 @@ The pipeline:
     and paired t-tests.
 11. Saves analysis tables, figures, and the final participant-level dataset.
 
-
-Author: Ketaki Sengupta
 """
 
 from __future__ import annotations
@@ -63,7 +61,6 @@ class AnalysisResults:
 
 
 # INPUT / VALIDATION
-# ============================================================================
 
 def load_dataset(path: Path) -> pd.DataFrame:
     """Load an Excel or CSV participant-level TNT dataset."""
@@ -101,9 +98,9 @@ def validate_columns(data: pd.DataFrame) -> None:
         )
 
 
-# =============================================================================
+
 # SAMPLE BALANCING
-# =============================================================================
+
 
 def counterbalance_counts(data: pd.DataFrame) -> pd.DataFrame:
     """Count participants in each Counterbalance x randomizer cell."""
@@ -152,9 +149,9 @@ def sample_within_cells(
     return sampled
 
 
-# =============================================================================
+
 # LONG-FORM DATA AND DESCRIPTIVE SUMMARY
-# =============================================================================
+
 
 def to_long_format(data: pd.DataFrame) -> pd.DataFrame:
     """
@@ -241,9 +238,7 @@ def plot_intrusion_trajectory(
     plt.close(fig)
 
 
-# =============================================================================
 # PARTICIPANT-SPECIFIC INTRUSION SLOPES
-# =============================================================================
 
 def compute_participant_slopes(
     long_data: pd.DataFrame,
@@ -313,9 +308,8 @@ def add_intrusion_slopes(
     return output
 
 
-# =============================================================================
+
 # INDEX OF INTRUSION CONTROL (IIC)
-# =============================================================================
 
 def calculate_iic(block: pd.DataFrame) -> pd.Series:
     """
@@ -350,9 +344,7 @@ def add_iic_scores(data: pd.DataFrame) -> pd.DataFrame:
     return output
 
 
-# =============================================================================
 # CUE-INDEPENDENCE MEASURES
-# =============================================================================
 
 def add_cue_independence(data: pd.DataFrame) -> pd.DataFrame:
     """
@@ -383,9 +375,8 @@ def add_cue_independence(data: pd.DataFrame) -> pd.DataFrame:
     return output
 
 
-# =============================================================================
+
 # RELIABILITY AND CORRELATIONS
-# =============================================================================
 
 def cronbach_alpha_table(data: pd.DataFrame) -> pd.DataFrame:
     """Calculate Cronbach's alpha for the repetition sets in the R workflow."""
@@ -500,9 +491,7 @@ def correlation_with_ci(
     return r_matrix, p_matrix, ci_matrix
 
 
-# =============================================================================
 # CONFIRMATORY FACTOR ANALYSIS
-# =============================================================================
 
 def fit_one_factor_cfa(
     data: pd.DataFrame,
@@ -601,9 +590,8 @@ def add_latent_factors(
     return output, combined_fit, fitted_models
 
 
-# =============================================================================
+
 # WITHIN-COUNTERBALANCE Z-NORMALIZATION
-# =============================================================================
 
 def zscore_within_group(
     data: pd.DataFrame,
@@ -641,9 +629,8 @@ def add_normalized_scores(data: pd.DataFrame) -> pd.DataFrame:
     return output
 
 
-# =============================================================================
 # STATISTICAL TESTS
-# =============================================================================
+
 
 def safe_shapiro(series: pd.Series) -> tuple[float, float]:
     """Run Shapiro-Wilk after dropping missing values."""
@@ -820,9 +807,8 @@ def run_repeated_measures_anovas(
     return cue_anova, passive_anova
 
 
-# =============================================================================
 # DISTRIBUTION PLOTS
-# =============================================================================
+
 
 def plot_distribution(
     data: pd.DataFrame,
@@ -894,9 +880,7 @@ def save_distribution_plots(
             )
 
 
-# =============================================================================
 # COMPLETE ANALYSIS PIPELINE
-# =============================================================================
 
 def run_analysis(
     input_file: Path,
@@ -963,9 +947,7 @@ def run_analysis(
 
     save_distribution_plots(data, output_dir)
 
-    # -------------------------------------------------------------------------
     # EXPORT RESULTS
-    # -------------------------------------------------------------------------
 
     data.to_excel(
         output_dir / "Pocket_TNT_Analyzed.xlsx",
@@ -1022,9 +1004,7 @@ def run_analysis(
     )
 
 
-# =============================================================================
 # COMMAND-LINE INTERFACE
-# =============================================================================
 
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
